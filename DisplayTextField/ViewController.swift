@@ -11,6 +11,8 @@ class ViewController: UIViewController {
 
     @IBOutlet var label: UILabel!
     @IBOutlet var textField: UITextField!
+    @IBOutlet var textView: UITextView!
+    var todoList = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,13 +22,23 @@ class ViewController: UIViewController {
     @IBAction func clear(_ sender: Any) {
         self.label.text = ""
         self.textField.text = ""
+        self.todoList = [String]()
+        self.textView.text = ""
     }
 }
 
 extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        self.label.text = textField.text
+        if let myValue = textField.text {
+            self.todoList.append(myValue)
+        }
+
+        self.textView.text = self.todoList.reduce("", { (result, todo) -> String in
+            return "\(result)\n\(todo)"
+        })
+
+        textField.text = ""
         return true
     }
 }
